@@ -5,15 +5,13 @@ function Slots() {
   const [pushedSpin, isPushedSpin] = ("");
   const [slotValues, setSlotValues] = ([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     runSlot();
   }, [])
 
-  const runSlot = () =>{
+  const runSlot = () => {
     let i = 9;
-    while(i > 1){
-      //let t = Math.floor(Math.random() * 5) + 1;
-      //setSlotValues([...slotValues, t]);
+    while (i > 1) {
       i--;
     }
   };
