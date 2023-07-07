@@ -5,7 +5,9 @@ import Lottery from "./components/Lottery";
 import Scratchers from "./components/Scratchers";
 import Slots from "./components/Slots";
 import Roulette from "./components/Roulette";
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
 function App() {
   return (
     <div>
@@ -17,9 +19,11 @@ function App() {
         <Route path="/Lottery" element={<Lottery />} />
         <Route path="/Scratchers" element={<Scratchers />} />
         <Route path="/Slots" element={<Slots />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
     </div>
   );
-};
+}
 
 export default App;

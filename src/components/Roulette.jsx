@@ -141,6 +141,232 @@ const StyledDiv = styled.div`
   }
 `;
 
+const BettingTableButtons = styled.button`
+  background: none;
+  border: 1px solid white;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(13, 1fr);
+  gap: 1rem;
+  margin: auto;
+  text-align: center;
+  .zero {
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+    align-self: center;
+  }
+  .one {
+    grid-column-start: 2;
+    grid-row-start: 3;
+  }
+  .two {
+    grid-column-start: 2;
+    grid-row-start: 2;
+  }
+  .three {
+    grid-column-start: 2;
+    grid-row-start: 1;
+  }
+  .four {
+    grid-column-start: 3;
+    grid-row-start: 3;
+  }
+  .five {
+    grid-column-start: 3;
+    grid-row-start: 2;
+  }
+  .six {
+    grid-column-start: 3;
+    grid-row-start: 1;
+  }
+  .seven {
+    grid-column-start: 4;
+    grid-row-start: 3;
+  }
+  .eight {
+    grid-column-start: 4;
+    grid-row-start: 2;
+  }
+  .nine {
+    grid-column-start: 4;
+    grid-row-start: 1;
+  }
+  .ten {
+    grid-column-start: 5;
+    grid-row-start: 3;
+  }
+  .eleven {
+    grid-column-start: 5;
+    grid-row-start: 2;
+  }
+  .twelve {
+    grid-column-start: 5;
+    grid-row-start: 1;
+  }
+  .thirteen {
+    grid-column-start: 6;
+    grid-row-start: 3;
+  }
+  .fourteen {
+    grid-column-start: 6;
+    grid-row-start: 2;
+  }
+  .fifteen {
+    grid-column-start: 6;
+    grid-row-start: 1;
+  }
+  .sixteen {
+    grid-column-start: 7;
+    grid-row-start: 3;
+  }
+  .seventeen {
+    grid-column-start: 7;
+    grid-row-start: 2;
+  }
+  .eighteen {
+    grid-column-start: 7;
+    grid-row-start: 1;
+  }
+  .nineteen {
+    grid-column-start: 8;
+    grid-row-start: 3;
+  }
+  .twenty {
+    grid-column-start: 8;
+    grid-row-start: 2;
+  }
+  .twentyone {
+    grid-column-start: 8;
+    grid-row-start: 1;
+  }
+  .twentytwo {
+    grid-column-start: 9;
+    grid-row-start: 3;
+  }
+  .twentythree {
+    grid-column-start: 9;
+    grid-row-start: 2;
+  }
+  .twentyfour {
+    grid-column-start: 9;
+    grid-row-start: 1;
+  }
+  .twentyfive {
+    grid-column-start: 10;
+    grid-row-start: 3;
+  }
+  .twentysix {
+    grid-column-start: 10;
+    grid-row-start: 2;
+  }
+  .twentyseven {
+    grid-column-start: 10;
+    grid-row-start: 1;
+  }
+  .twentyeight {
+    grid-column-start: 11;
+    grid-row-start: 3;
+  }
+  .twentynine {
+    grid-column-start: 11;
+    grid-row-start: 2;
+  }
+  .thirty {
+    grid-column-start: 11;
+    grid-row-start: 1;
+  }
+  .thirtyone {
+    grid-column-start: 12;
+    grid-row-start: 3;
+  }
+  .thirtytwo {
+    grid-column-start: 12;
+    grid-row-start: 2;
+  }
+  .thirtythree {
+    grid-column-start: 12;
+    grid-row-start: 1;
+  }
+  .thirtyfour {
+    grid-column-start: 13;
+    grid-row-start: 3;
+  }
+  .thirtyfive {
+    grid-column-start: 13;
+    grid-row-start: 2;
+  }
+  .thirtysix {
+    grid-column-start: 13;
+    grid-row-start: 1;
+  }
+  .twotooneone {
+    grid-column-start: 14;
+    grid-row-start: 3;
+  }
+  .twotoonetwo {
+    grid-column-start: 14;
+    grid-row-start: 2;
+  }
+  .twotoonethree {
+    grid-column-start: 14;
+    grid-row-start: 1;
+  }
+  .firsttwelve {
+    grid-column-start: 2;
+    grid-row-start: 4;
+    grid-column-end: span 4;
+    grid-row-end: span 4;
+  }
+  .secondtwelve {
+    grid-column-start: 6;
+    grid-row-start: 4;
+    grid-column-end: span 4;
+    grid-row-end: span 4;
+  }
+  .thirdtwelve {
+    grid-column-start: 10;
+    grid-row-start: 4;
+    grid-column-end: span 4;
+    grid-row-end: span 4;
+  }
+  .onetoeighteen {
+    grid-column-start: 2;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+  .even {
+    grid-column-start: 4;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+  .red {
+    grid-column-start: 6;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+  .black {
+    grid-column-start: 8;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+  .odd {
+    grid-column-start: 10;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+  .nineteentothirtysix {
+    grid-column-start: 12;
+    grid-row-start: 5;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+  }
+`;
+
 const RedTableButton = styled.button`
   font-family: "Open Sans", sans-serif;
   font-size: 2rem;
