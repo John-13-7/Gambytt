@@ -177,7 +177,7 @@ const StyledDiv = styled.div`
 
 const BettingTableButtons = styled.button`
   background: none;
-  border: none;
+  border: 1px solid white;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(13, 1fr);
