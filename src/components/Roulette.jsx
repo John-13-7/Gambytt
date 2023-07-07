@@ -1,16 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import roulettewheel from "../images/roulettewheel.png";
 import { useState, useEffect } from "react";
-
+import { ButtonWrappers } from "./styles";
 function Roulette() {
   //Values 0-36, usually use these to lookup the roulette values
   const [spin, setSpin] = useState();
   //Image spins in degrees to where the value is at [0] = 0 degs... [35] = 355 degs
   const [degree, setDegree] = useState(0);
   //All roulette values are previously set, starts at green 0 and ends in 26 black
-  const [rouletteValues, setRouletteValues] = useState([0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30,
-    8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26]);
+  const [rouletteValues, setRouletteValues] = useState([
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
+    24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
+  ]);
   //Animates spinning so it will not automatically go to the spin
   const [isAnimating, setIsAnimating] = useState(true);
   //Players local wallet, this will not work for other places like on BJ or Slots
@@ -22,19 +24,7 @@ function Roulette() {
   const [betFiveActive, isBetFiveActive] = useState(false);
   const [betTenActive, isBetTenActive] = useState(false);
 
-  //TODO
-  //const bet1arr[k,v]
-  //const bet5arr[k,v]
-  //const bet10arr[k,v]
-  //const prevtransaction(0) and only update it after I make a transaction or i hit a button so I can undo
-  //function undo previous transaction
-  //function clear bets
-
-  //Notes
-  //Only do the calculations if I win something dont always do them, maybe a flag, and make sure to multiply corectly
-  //This can all be done in the on clicks inside of the buttons for each buttton 
-  //the other weird bets can be done last, maybe add values 37, 38, 39, 40....
-  
+  const boardButtons = Array.from(Array(49).keys());
 
   const handleBetClick = (bet) => {
     switch (bet) {
@@ -53,7 +43,7 @@ function Roulette() {
         isBetFiveActive(false);
         isBetTenActive(true);
         break;
-    };
+    }
   };
 
   const getSpin = () => {
@@ -72,83 +62,60 @@ function Roulette() {
     }, numSpins * 1000);
   };
 
-  //condition ? expressionIfTrue : expressionIfFalse
   return (
     <StyledDiv>
       <BetWrappers>
-        <BetButton className='spin' onClick={getSpin}>SPIN</BetButton>
-        <BetButton className={`bet1 ${betOneActive === true ? "active" : ""}`}
-          onClick={() => handleBetClick(1)}>Bet 1</BetButton>
-        <BetButton className={`bet5 ${betFiveActive === true ? "active" : ""}`}
-          onClick={() => handleBetClick(5)}>Bet 5</BetButton>
-        <BetButton className={`bet10 ${betTenActive === true ? "active" : "" }`}
-          onClick={() => handleBetClick(10)}>Bet 10</BetButton>
-        <Wallet className='funds'>{wallet}</Wallet>
+        <BetButton className="spin" onClick={getSpin}>
+          SPIN
+        </BetButton>
+        <BetButton
+          className={`bet1 ${betOneActive === true ? "active" : ""}`}
+          onClick={() => handleBetClick(1)}
+        >
+          Bet 1
+        </BetButton>
+        <BetButton
+          className={`bet5 ${betFiveActive === true ? "active" : ""}`}
+          onClick={() => handleBetClick(5)}
+        >
+          Bet 5
+        </BetButton>
+        <BetButton
+          className={`bet10 ${betTenActive === true ? "active" : ""}`}
+          onClick={() => handleBetClick(10)}
+        >
+          Bet 10
+        </BetButton>
+        <Wallet className="funds">{wallet}</Wallet>
       </BetWrappers>
-      <BettingTableButtons className='buttons'>
-        <GreenTableButton className='zero'>0</GreenTableButton>
-        <RedTableButton className='one'>1</RedTableButton>
-        <BlackTableButton className='two'>2</BlackTableButton>
-        <RedTableButton className='three'>3</RedTableButton>
-        <BlackTableButton className='four'>4</BlackTableButton>
-        <RedTableButton className='five'>5</RedTableButton>
-        <BlackTableButton className='six'>6</BlackTableButton>
-        <RedTableButton className='seven'>7</RedTableButton>
-        <BlackTableButton className='eight'>8</BlackTableButton>
-        <RedTableButton className='nine'>9</RedTableButton>
-        <BlackTableButton className='ten'>10</BlackTableButton>
-        <BlackTableButton className='eleven'>11</BlackTableButton>
-        <RedTableButton className='twelve'>12</RedTableButton>
-        <BlackTableButton className='thirteen'>13</BlackTableButton>
-        <RedTableButton className='fourteen'>14</RedTableButton>
-        <BlackTableButton className='fifteen'>15</BlackTableButton>
-        <RedTableButton className='sixteen'>16</RedTableButton>
-        <BlackTableButton className='seventeen'>17</BlackTableButton>
-        <RedTableButton className='eighteen'>18</RedTableButton>
-        <RedTableButton className='nineteen'>19</RedTableButton>
-        <BlackTableButton className='twenty'>20</BlackTableButton>
-        <RedTableButton className='twentyone'>21</RedTableButton>
-        <BlackTableButton className='twentytwo'>22</BlackTableButton>
-        <RedTableButton className='twentythree'>23</RedTableButton>
-        <BlackTableButton className='twentyfour'>24</BlackTableButton>
-        <RedTableButton className='twentyfive'>25</RedTableButton>
-        <BlackTableButton className='twentysix'>26</BlackTableButton>
-        <RedTableButton className='twentyseven'>27</RedTableButton>
-        <BlackTableButton className='twentyeight'>28</BlackTableButton>
-        <BlackTableButton className='twentynine'>29</BlackTableButton>
-        <RedTableButton className='thirty'>30</RedTableButton>
-        <BlackTableButton className='thirtyone'>31</BlackTableButton>
-        <RedTableButton className='thirtytwo'>32</RedTableButton>
-        <BlackTableButton className='thirtythree'>33</BlackTableButton>
-        <RedTableButton className='thirtyfour'>34</RedTableButton>
-        <BlackTableButton className='thirtyfive'>35</BlackTableButton>
-        <RedTableButton className='thirtysix'>36</RedTableButton>
-        <MiscButton className='twotooneone'>2to1</MiscButton>
-        <MiscButton className='twotoonetwo'>2to1</MiscButton>
-        <MiscButton className='twotoonethree'>2to1</MiscButton>
-        <MiscButton className='firsttwelve'>1st12</MiscButton>
-        <MiscButton className='secondtwelve'>2nd12</MiscButton>
-        <MiscButton className='thirdtwelve'>3rd12</MiscButton>
-        <MiscButton className='onetoeighteen'>1to18</MiscButton>
-        <MiscButton className='even'>Even</MiscButton>
-        <MiscButton className='red'>Red</MiscButton>
-        <MiscButton className='black'>Black</MiscButton>
-        <MiscButton className='odd'>Odd</MiscButton>
-        <MiscButton className='nineteentothirtysix'>19to36</MiscButton>
-      </BettingTableButtons>
-      <img src={roulettewheel} className="wheel" style={{
-        transform: `rotate(${degree}deg)`,
-        animationPlayState: isAnimating ? 'running' : 'paused'
-      }}></img>
+      <div>
+        <ButtonWrappers>
+          {boardButtons.map((b, index) => (
+            <div className="button-container">
+              <button className="individual-button" key={index}>
+                {b}
+              </button>
+            </div>
+          ))}
+        </ButtonWrappers>
+      </div>
+      <img
+        src={roulettewheel}
+        className="wheel"
+        style={{
+          transform: `rotate(${degree}deg)`,
+          animationPlayState: isAnimating ? "running" : "paused",
+        }}
+      ></img>
       {spin} {degree} {wallet} {bet}
     </StyledDiv>
   );
-};
+}
 
 const BetWrappers = styled.div`
   display: flex;
   flex-wrap: wrap;
-  .funds{
+  .funds {
     flex-basis: 100%;
     margin-top: 0;
   }
@@ -162,17 +129,16 @@ const Wallet = styled.p`
 const StyledDiv = styled.div`
   background-color: #95edf0;
   display: flex;
-  .wheel{
+  .wheel {
     height: 50vh;
     margin-top: 20px;
   }
-  .spin{
-      margin-left: 20px;
+  .spin {
+    margin-left: 20px;
   }
-  .buttons{
+  .buttons {
     margin-top: 20px;
   }
-    
 `;
 
 const BettingTableButtons = styled.button`
@@ -184,224 +150,221 @@ const BettingTableButtons = styled.button`
   gap: 1rem;
   margin: auto;
   text-align: center;
-  .zero{
+  .zero {
     grid-column: 1 / 2;
     grid-row: 1 / 4;
     align-self: center;
   }
-  .one{
+  .one {
     grid-column-start: 2;
     grid-row-start: 3;
   }
-  .two{
+  .two {
     grid-column-start: 2;
     grid-row-start: 2;
   }
-  .three{
+  .three {
     grid-column-start: 2;
     grid-row-start: 1;
   }
-  .four{
+  .four {
     grid-column-start: 3;
     grid-row-start: 3;
   }
-  .five{
+  .five {
     grid-column-start: 3;
     grid-row-start: 2;
   }
-  .six{
+  .six {
     grid-column-start: 3;
     grid-row-start: 1;
   }
-  .seven{
+  .seven {
     grid-column-start: 4;
     grid-row-start: 3;
   }
-  .eight{
+  .eight {
     grid-column-start: 4;
     grid-row-start: 2;
   }
-  .nine{
+  .nine {
     grid-column-start: 4;
     grid-row-start: 1;
   }
-  .ten{
+  .ten {
     grid-column-start: 5;
     grid-row-start: 3;
   }
-  .eleven{
+  .eleven {
     grid-column-start: 5;
     grid-row-start: 2;
   }
-  .twelve{
+  .twelve {
     grid-column-start: 5;
     grid-row-start: 1;
   }
-  .thirteen{
+  .thirteen {
     grid-column-start: 6;
     grid-row-start: 3;
   }
-  .fourteen{
+  .fourteen {
     grid-column-start: 6;
     grid-row-start: 2;
   }
-  .fifteen{
+  .fifteen {
     grid-column-start: 6;
     grid-row-start: 1;
   }
-  .sixteen{
+  .sixteen {
     grid-column-start: 7;
     grid-row-start: 3;
   }
-  .seventeen{
+  .seventeen {
     grid-column-start: 7;
     grid-row-start: 2;
   }
-  .eighteen{
+  .eighteen {
     grid-column-start: 7;
     grid-row-start: 1;
   }
-  .nineteen{
+  .nineteen {
     grid-column-start: 8;
     grid-row-start: 3;
   }
-  .twenty{
+  .twenty {
     grid-column-start: 8;
     grid-row-start: 2;
   }
-  .twentyone{
+  .twentyone {
     grid-column-start: 8;
     grid-row-start: 1;
   }
-  .twentytwo{
+  .twentytwo {
     grid-column-start: 9;
     grid-row-start: 3;
   }
-  .twentythree{
+  .twentythree {
     grid-column-start: 9;
     grid-row-start: 2;
   }
-  .twentyfour{
+  .twentyfour {
     grid-column-start: 9;
     grid-row-start: 1;
   }
-  .twentyfive{
+  .twentyfive {
     grid-column-start: 10;
     grid-row-start: 3;
   }
-  .twentysix{
+  .twentysix {
     grid-column-start: 10;
     grid-row-start: 2;
   }
-  .twentyseven{
+  .twentyseven {
     grid-column-start: 10;
     grid-row-start: 1;
   }
-  .twentyeight{
+  .twentyeight {
     grid-column-start: 11;
     grid-row-start: 3;
   }
-  .twentynine{
+  .twentynine {
     grid-column-start: 11;
     grid-row-start: 2;
   }
-  .thirty{
+  .thirty {
     grid-column-start: 11;
     grid-row-start: 1;
   }
-  .thirtyone{
+  .thirtyone {
     grid-column-start: 12;
     grid-row-start: 3;
   }
-  .thirtytwo{
+  .thirtytwo {
     grid-column-start: 12;
     grid-row-start: 2;
   }
-  .thirtythree{
+  .thirtythree {
     grid-column-start: 12;
     grid-row-start: 1;
   }
-  .thirtyfour{
+  .thirtyfour {
     grid-column-start: 13;
     grid-row-start: 3;
   }
-  .thirtyfive{
+  .thirtyfive {
     grid-column-start: 13;
     grid-row-start: 2;
   }
-  .thirtysix{
+  .thirtysix {
     grid-column-start: 13;
     grid-row-start: 1;
   }
-  .twotooneone{
+  .twotooneone {
     grid-column-start: 14;
     grid-row-start: 3;
   }
-  .twotoonetwo{
+  .twotoonetwo {
     grid-column-start: 14;
     grid-row-start: 2;
   }
-  .twotoonethree{
+  .twotoonethree {
     grid-column-start: 14;
     grid-row-start: 1;
   }
-  .firsttwelve{
+  .firsttwelve {
     grid-column-start: 2;
     grid-row-start: 4;
     grid-column-end: span 4;
     grid-row-end: span 4;
   }
-  .secondtwelve{
+  .secondtwelve {
     grid-column-start: 6;
     grid-row-start: 4;
     grid-column-end: span 4;
     grid-row-end: span 4;
   }
-  .thirdtwelve{
+  .thirdtwelve {
     grid-column-start: 10;
     grid-row-start: 4;
     grid-column-end: span 4;
     grid-row-end: span 4;
   }
-  .onetoeighteen{
+  .onetoeighteen {
     grid-column-start: 2;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-  .even{
+  .even {
     grid-column-start: 4;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-  .red{
+  .red {
     grid-column-start: 6;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-  .black{
+  .black {
     grid-column-start: 8;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-  .odd{
+  .odd {
     grid-column-start: 10;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-  .nineteentothirtysix{
+  .nineteentothirtysix {
     grid-column-start: 12;
     grid-row-start: 5;
     grid-column-end: span 2;
     grid-row-end: span 2;
   }
-
-
-
 `;
 
 const RedTableButton = styled.button`
@@ -446,27 +409,26 @@ const MiscButton = styled.button`
 `;
 
 const BetButton = styled.button`
-    font-family: "Teko", sans-serif;
-    font-size: 2.2rem;
-    cursor: pointer;
-    color: black;
-    height: 100px;
-    width: 100px;
-    display: block;
-    pointer-events: all;
-    z-index: 999;
-    margin-top: 20px;
-    border-radius: 4px;
+  font-family: "Teko", sans-serif;
+  font-size: 2.2rem;
+  cursor: pointer;
+  color: black;
+  height: 100px;
+  width: 100px;
+  display: block;
+  pointer-events: all;
+  z-index: 999;
+  margin-top: 20px;
+  border-radius: 4px;
 
-    &.active{
-      background-color: #f5f51e;
-      color: black;
-      border: 1px solid black;
-    }
-    &:not(:last-child) {
+  &.active {
+    background-color: #f5f51e;
+    color: black;
+    border: 1px solid black;
+  }
+  &:not(:last-child) {
     margin-right: 10px; // Add some right margin to all but the last button
-    }
-    
+  }
 `;
 
 export default Roulette;

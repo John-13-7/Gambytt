@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 const User = require("./models/user"); //schema of all the users
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-app.use(cookieParser());
+//const cookieParser = require("cookie-parser");
+//app.use(cookieParser());
 //So it can run locally
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
