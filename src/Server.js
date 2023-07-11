@@ -13,7 +13,10 @@ require("dotenv").config();
 //So it can run locally
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // change this when i deploy
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+  );
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true"); //for tokens
 
@@ -36,6 +39,18 @@ mongoose
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
 
+//for the tokens whenever the user thats logged in to access something
+function authenticateToken(req, res, next) {
+  const token = req.cookies.jwt;
+  if (token == null) return res.sendStatus(401); // if there isn't any token
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next(); // pass the execution off to whatever request the client intended
+  });
+}
+
 //login
 app.post("/login", async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
@@ -47,7 +62,8 @@ app.post("/login", async (req, res) => {
     if (await bcrypt.compare(req.body.password, user.password)) {
       const accessToken = jwt.sign(
         { username: user.username },
-        process.env.ACCESS_TOKEN_SECRET
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "1hr" }
       );
 
       // Set JWT as a HTTP-only cookie
@@ -88,6 +104,25 @@ app.post("/register", async (req, res) => {
 app.post("/logout", (req, res) => {
   res.clearCookie("jwt");
   res.status(200).send("User logged out");
+});
+
+//update wallet
+app.patch("/update_balance", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    //user not found
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    //user is found
+    const update_balance = Number(req.body.update);
+    user.wallet += update_balance;
+
+    const update_user = await user.save();
+    res.json(update_user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(process.env.PORT, () => {
