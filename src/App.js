@@ -8,6 +8,7 @@ import Roulette from "./components/Roulette";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Logout from "./components/Logout";
 function App() {
   return (
     <div>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/Slots" element={<Slots />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
+        <Route path="/Logout" element={<Logout />} />
       </Routes>
     </div>
   );
