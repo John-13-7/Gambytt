@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -9,14 +10,18 @@ function Register() {
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [wallet, setWallet] = useState(0);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("name: ", username, " password: ", password, " email: ", email);
     if (password !== confirmPassword) {
-      console.log("passwords no not match");
+      setError("Passwords do not match");
+      return;
     } else if (email !== confirmEmail) {
-      console.log("emails do not match");
+      setError("Emails do not match");
+      return;
     } else {
       axios
         .post("http://localhost:5000/register", {
@@ -24,6 +29,11 @@ function Register() {
           password,
           email,
           wallet,
+        })
+        .then((response) => {
+          if (response) {
+            navigate("/");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -64,6 +74,7 @@ function Register() {
           value={confirmEmail}
           onChange={(e) => setConfirmEmail(e.target.value)}
         ></StyledInput>
+        {error && <h2>{error}</h2>}
         <StyledButton type="submit">Register</StyledButton>
       </form>
     </StyledDiv>
@@ -76,6 +87,7 @@ const StyledDiv = styled.div`
   justify-content: center;
   height: 100vh;
   background-color: #f5f5f5;
+  font-family: "Open-sans", sans-serif;
 
   form {
     display: flex;
@@ -90,21 +102,21 @@ const StyledDiv = styled.div`
 
   h1 {
     color: #333;
-    margin-bottom: 2em;
+    margin-bottom: 30px;
   }
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  width: 75%;
   padding: 1em;
-  margin-bottom: 1em;
+  margin: 10px 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 1em;
 `;
 
 const StyledButton = styled.button`
-  width: 100%;
+  width: 75%;
   padding: 1em;
   border-radius: 8px;
   border: none;
@@ -113,6 +125,7 @@ const StyledButton = styled.button`
   font-size: 1em;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 40px;
 `;
 
 export default Register;
