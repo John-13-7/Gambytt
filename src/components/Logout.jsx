@@ -4,15 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Logout() {
-  const [updateBalance, setUpdateBalance] = useState(420);
   const navigate = useNavigate();
-  const handleBalance = () => {
-    axios.patch(
-      "http://localhost:5000/update_balance",
-      { update: updateBalance },
-      { withCredentials: true }
-    );
-  };
 
   const handleLogout = () => {
     axios
