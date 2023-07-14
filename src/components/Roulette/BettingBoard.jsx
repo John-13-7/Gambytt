@@ -1,25 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import roulette2 from "../images/roulette2.png";
-import { useState } from "react";
-
-function Roulette() {
-  const [spin, setSpin] = useState();
-  const [degree, setDegree] = useState(0);
+function BettingBoard() {
   const [rouletteValues, setRouletteValues] = useState([
     0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37,
     27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2,
   ]);
-  const [isAnimating, setIsAnimating] = useState(true);
-  const [wallet, setWallet] = useState(0);
-  const [bet, setBet] = useState(0);
-  const [betOneActive, isBetOneActive] = useState(true);
-  const [betFiveActive, isBetFiveActive] = useState(false);
-  const [betTenActive, isBetTenActive] = useState(false);
-
-  //create the buttons
   const boardButtons = Array.from(Array(50).keys());
-
   const buttonDisplayText = {
     37: "00",
     38: "2 to 1",
@@ -35,106 +21,29 @@ function Roulette() {
     48: "ODD",
     49: "19-36",
   };
-  const handleBetClick = (bet) => {
-    setBet(bet);
-    switch (bet) {
-      case 1:
-        isBetOneActive(true);
-        isBetFiveActive(false);
-        isBetTenActive(false);
-        break;
-      case 5:
-        isBetOneActive(false);
-        isBetFiveActive(true);
-        isBetTenActive(false);
-        break;
-      case 10:
-        isBetOneActive(false);
-        isBetFiveActive(false);
-        isBetTenActive(true);
-        break;
-    }
-  };
-
-  const getSpin = () => {
-    setIsAnimating(true);
-    const numSpins = Math.floor(Math.random() * 10) + 5;
-    const spinInterval = setInterval(() => {
-      setDegree((degree) => (degree + 30) % 360);
-    }, 50);
-
-    setTimeout(() => {
-      clearInterval(spinInterval);
-      const newNum = Math.floor(Math.random() * 38);
-      setSpin(rouletteValues[newNum]);
-      const newDegree = Math.floor(-9.47 * newNum);
-      setDegree(newDegree);
-      setIsAnimating(false);
-      if (spin === bet) {
-        // Change this condition according to your game logic
-        setWallet(wallet + bet); // Change this according to your game logic
-      }
-    }, numSpins * 1000);
-  };
 
   return (
-    <RouletteDiv>
-      <BettingBoard>
-        {boardButtons.map((b, index) => (
-          <div className="button-container">
-            <button className="individual-button" key={index}>
-              {buttonDisplayText[b] || b}
-            </button>
-          </div>
-        ))}
-      </BettingBoard>
-      <div className="roulette-wheel">
-        <img
-          src={roulette2}
-          className="wheel"
-          style={{
-            transform: `rotate(${degree}deg)`,
-            animationPlayState: isAnimating ? "running" : "paused",
-          }}
-        ></img>
-        {spin} {degree} {wallet} {bet}
-      </div>
-      <div>
-        <BetButton className="spin" onClick={getSpin}>
-          SPIN
-        </BetButton>
-        <BetButton
-          className={`bet1 ${betOneActive === true ? "active" : ""}`}
-          onClick={() => handleBetClick(1)}
-        >
-          Bet 1
-        </BetButton>
-        <BetButton
-          className={`bet5 ${betFiveActive === true ? "active" : ""}`}
-          onClick={() => handleBetClick(5)}
-        >
-          Bet 5
-        </BetButton>
-        <BetButton
-          className={`bet10 ${betTenActive === true ? "active" : ""}`}
-          onClick={() => handleBetClick(10)}
-        >
-          Bet 10
-        </BetButton>
-      </div>
-    </RouletteDiv>
+    <Board>
+      {boardButtons.map((b, index) => (
+        <div className="button-container">
+          <button className="individual-button" key={index}>
+            {buttonDisplayText[b] || b}
+          </button>
+        </div>
+      ))}
+    </Board>
   );
 }
 
-const RouletteDiv = styled.div``;
-
-export const BettingBoard = styled.div`
-  background-color: #4cc84c;
+export const Board = styled.div`
   display: grid;
   grid-template-columns: repeat(14, 75px);
   grid-template-rows: repeat(13, 75px);
+  margin: 1.5rem;
+  margin-top: 50px;
 
   .button-container {
+    background-color: #4cc84c;
     width: 100%;
     height: 100%;
     border: 2px solid #ffffff;
@@ -514,17 +423,4 @@ export const BettingBoard = styled.div`
   }
 `;
 
-const BetButton = styled.button`
-  cursor: pointer;
-  height: 10rem;
-  width: 10rem;
-  border-radius: 4px;
-
-  &.active {
-    background-color: #f5f51e;
-    color: black;
-    border: 1px solid black;
-  }
-`;
-
-export default Roulette;
+export default BettingBoard;
