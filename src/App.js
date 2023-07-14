@@ -7,6 +7,8 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Logout from "./components/Logout";
+import Playground from "./components/Playground";
+
 function App() {
   return (
     <div>
@@ -19,6 +21,7 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Logout" element={<Logout />} />
+        <Route path="/P" element={<Playground />} />
       </Routes>
     </div>
   );

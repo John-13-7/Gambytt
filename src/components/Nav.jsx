@@ -7,6 +7,15 @@ function Nav() {
       <h2>
         <Link to="/">Gambytt</Link>
       </h2>
+      <h3>
+        <Link to="/Login">Login</Link>
+      </h3>
+      <h3>
+        <Link to="/Logout">Logout</Link>
+      </h3>
+      <h3>
+        <Link to="/P">Playground</Link>
+      </h3>
     </StyledNav>
   );
 }

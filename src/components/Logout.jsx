@@ -9,16 +9,20 @@ function Logout() {
   const handleLogout = () => {
     axios
       .post("http://localhost:5000/logout", {}, { withCredentials: true })
+      .then(() => {
+        navigate("/login"); // or wherever you want to navigate after logging out
+      })
       .catch((error) => {
         console.log(error);
         alert("An error occurred during logout."); // alert user on error
       });
   };
+
   return (
     <LogoutDiv>
       <div>
         <h1>Tired of losing money?</h1>
-        <button onClick={handleLogout}>Click me to logout</button>
+        <button onClick={() => handleLogout}>Click me to logout</button>
       </div>
       <div>
         <h1>Changed your mind?</h1>

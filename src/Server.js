@@ -1,18 +1,19 @@
 const express = require("express");
 const app = express();
-//const port = process.env.PORT || 5000;
-app.use(express.json());
 const mongoose = require("mongoose");
 const User = require("./models/user"); //schema of all the users
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-app.use(cookieParser());
+const passport = require("passport");
+const router = express.Router();
 require("dotenv").config();
+app.use(express.json());
+app.use(cookieParser());
 
 //So it can run locally
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // change this when i deploy
+  res.header("Access-Control-Allow-Origin", "http://localhost:5001");
   res.header(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS, PATCH"
@@ -67,6 +68,11 @@ app.post("/login", async (req, res) => {
       );
 
       // Set JWT as a HTTP-only cookie
+      // res.cookie("jwt", accessToken, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   sameSite: "none",
+      // });
       res.cookie("jwt", accessToken, { httpOnly: true, secure: false }); // secure should be set to true if using https
       res.status(200).json({ success: true });
     } else {
@@ -102,8 +108,15 @@ app.post("/register", async (req, res) => {
 
 //logout
 app.post("/logout", (req, res) => {
-  res.clearCookie("jwt");
-  res.status(200).send("User logged out");
+  try {
+    res.clearCookie("jwt", { httpOnly: true, secure: false });
+    //res.clearCookie("jwt");
+    //res.clearCookie("jwt", { httpOnly: true, secure: false, sameSite: "none" });
+
+    res.status(200).send("User logged out");
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 //update wallet
@@ -124,6 +137,32 @@ app.patch("/update_balance", authenticateToken, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get("/getUser/:username", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+//authenticate user
+router.get("/user", authenticateToken, (req, res) => {
+  // If the user is authenticated, return their data.
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    // If the user is not authenticated, return an error message.
+    res.status(401).json({ error: "Not authenticated" });
+  }
+});
+app.use("/api", router);
+
+module.exports = router;
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port: ${process.env.PORT}`);

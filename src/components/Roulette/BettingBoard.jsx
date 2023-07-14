@@ -1,11 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import roulette2 from "./roulette2.png";
+import axios from "axios";
+
 function BettingBoard() {
+  //roullete values chronological order
   const [rouletteValues, setRouletteValues] = useState([
     0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37,
     27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2,
   ]);
+  //idk
+  const [spin, setSpin] = useState();
+  //how much the roulette wheel rotates
+  const [degree, setDegree] = useState(0);
+  //when wheel animates
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [bet, setBet] = useState(0);
+  //grabs the current users wallet from mongoDB
+  const [wallet, setWallet] = useState(0);
+  //grabs only the users name from the cookies
+  const [user, setUser] = useState(null);
+  //grabs user object
+  const [userObject, setUserObject] = useState({});
+  //create game buttons
   const boardButtons = Array.from(Array(50).keys());
+  //rename game buttons
   const buttonDisplayText = {
     37: "00",
     38: "2 to 1",
@@ -21,21 +40,208 @@ function BettingBoard() {
     48: "ODD",
     49: "19-36",
   };
+  //each row has a different value from 1$, 5$, 10$, 25$
+  const [bets, setBets] = useState({
+    1: [],
+    5: [],
+    10: [],
+    25: [],
+  });
+  //buttons betting 1, 5, 10, 25
+  const [cost, setCost] = useState(1);
+  //active buttons are highlighted
+  const [activeButton, setActiveButton] = useState({
+    1: "active",
+    5: "",
+    10: "",
+    25: "",
+  });
+
+  //handles changing bet cost buttons
+  const handleCost = (cost) => {
+    setCost(cost);
+    setActiveButton({
+      1: "",
+      5: "",
+      10: "",
+      25: "",
+      [cost]: "active", // Add "active" class to the clicked button
+    });
+  };
+
+  const getSpin = () => {
+    setIsAnimating(true);
+    const numSpins = Math.floor(Math.random() * 10) + 5;
+    const spinInterval = setInterval(() => {
+      setDegree((degree) => (degree + 30) % 360);
+    }, 50);
+    setTimeout(() => {
+      clearInterval(spinInterval);
+      const newNum = Math.floor(Math.random() * 38);
+      setSpin(rouletteValues[newNum]);
+      const newDegree = Math.floor(-9.47 * newNum);
+      setDegree(newDegree);
+      setIsAnimating(false);
+      // if (spin === bet) {
+      //   // Change this condition according to your game logic
+      //   setWallet(wallet + bet); // Change this according to your game logic
+      // }
+    }, numSpins * 1000);
+  };
+
+  //grabs the username only
+  // const fetchUser = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:5000/api/user", {
+  //       withCredentials: true,
+  //     });
+  //     setUser(response.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/user", {
+        withCredentials: true,
+      });
+      // Checks if the response contains username field
+      if (response.data && response.data.username) {
+        setUser(response.data);
+      } else {
+        setUser(null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  //grabs the user object
+  const fetchUserDetail = async () => {
+    if (user) {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/getUser/${user.username}`,
+          {
+            withCredentials: true,
+          }
+        );
+        setWallet(response.data.wallet);
+        setUserObject(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      setUserObject({});
+      setWallet(0);
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserDetail();
+    }
+  }, [user]);
 
   return (
-    <Board>
-      {boardButtons.map((b, index) => (
-        <div className="button-container">
-          <button className="individual-button" key={index}>
-            {buttonDisplayText[b] || b}
+    <RouletteGameDiv>
+      <Board>
+        {boardButtons.map((b, index) => (
+          <div className="button-container" key={index}>
+            <button
+              id={index}
+              className="individual-button"
+              onClick={(e) => {
+                console.log(e.target.id);
+                console.log(bets);
+                setBets((prevBets) => ({
+                  ...prevBets,
+                  [cost]: [...prevBets[cost], e.target.id],
+                }));
+              }}
+            >
+              {buttonDisplayText[b] || b}
+            </button>
+          </div>
+        ))}
+      </Board>
+      <RouletteWheel>
+        <div className="roulette-wheel">
+          <img
+            src={roulette2}
+            className="wheel"
+            style={{
+              transform: `rotate(${degree}deg)`,
+              animationPlayState: isAnimating ? "running" : "paused",
+            }}
+          ></img>
+        </div>
+
+        <div className="button-costs">
+          <div className="wallet">User: {user ? user.username : "empty"}</div>
+          <div className="wallet">Balance: {user ? wallet : "empty"}</div>
+          <div className="wallet">Bet: {bet}</div>
+          <button onClick={() => setBets({ 1: [], 5: [], 10: [], 25: [] })}>
+            Undo bets
+          </button>
+          <button className={activeButton[1]} onClick={() => handleCost(1)}>
+            Bet 1
+          </button>
+          <button className={activeButton[5]} onClick={() => handleCost(5)}>
+            Bet 5
+          </button>
+          <button className={activeButton[10]} onClick={() => handleCost(10)}>
+            Bet 10
+          </button>
+          <button className={activeButton[25]} onClick={() => handleCost(25)}>
+            Bet 25
+          </button>
+          <button className="spin" onClick={getSpin}>
+            SPIN!
           </button>
         </div>
-      ))}
-    </Board>
+      </RouletteWheel>
+    </RouletteGameDiv>
   );
 }
 
-export const Board = styled.div`
+const RouletteGameDiv = styled.div`
+  display: flex;
+  .button-costs {
+    display: flex;
+    width: 5rem;
+    height: 5rem;
+    .active {
+      background-color: yellow;
+    }
+    .wallet {
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      border: 2px solid white;
+      background-color: white;
+    }
+  }
+`;
+
+const RouletteWheel = styled.div`
+  margin: 1rem;
+  .roulette-wheel {
+    img {
+      border: 4px solid white;
+      border-radius: 50%;
+      width: 20rem;
+      height: 20rem;
+    }
+  }
+`;
+
+const Board = styled.div`
   display: grid;
   grid-template-columns: repeat(14, 75px);
   grid-template-rows: repeat(13, 75px);
